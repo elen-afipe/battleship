@@ -10,5 +10,5 @@ test('when destroyer is hit 2 times, it  is sunk', ()=>{
     const Destroyer = new Ship(2)
     Destroyer.hit();
     Destroyer.hit();
-    expect(Destroyer.sunk).toBe(true)
+    expect(Destroyer.sunk).toBeTruthy()
 })

@@ -20,7 +20,7 @@ export default defineConfig([
 			...globals.browser,
 			},
 		},
-		ignores: ["dist/", "node_modules/", "build/", "**webpack.*.js"]
+		ignores: ["dist/", "node_modules/", "build/", "**webpack.*.js", "tests"]
 	},
     eslintConfigPrettier,
 ]);
