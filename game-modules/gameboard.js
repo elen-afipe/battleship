@@ -1,5 +1,4 @@
 const letters = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"];
-const lettersIndices = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
 function createGrid(){
     const grid = {};
     letters.forEach(letter=>{
@@ -60,21 +59,50 @@ export class Gameboard {
         })
      }
     }
-    #trackHitsAroundShip(coord, isSunk){
-        if(isSunk){
-            //sth
-        }else{
-            
-            // other
-        }
+    #trackHitsAroundShip(coord, ship){
+        if(ship.sunk){
+            if(ship.isVertical){
+                letters.forEach(letter =>{
+                    if(this.data[letter][coord[1]] === ship){
+                       let letterIndexAsNumber = letters.findIndex((element) => element === letter)
+                       const upLetter = (letterIndexAsNumber-1 >= 0 && letterIndexAsNumber-1 < letters.length) ? letters[letterIndexAsNumber-1] : null
+                       const downLetter = (letterIndexAsNumber+1 >= 0 && letterIndexAsNumber+1 < letters.length) ? letters[letterIndexAsNumber+1] : null
+                       const hitsCells = [[upLetter, coord[1]], [upLetter, coord[1]-1], [upLetter, coord[1]+1], [coord[0], coord[1]-1], [coord[0], coord[1]+1], [downLetter, coord[1]], [downLetter, coord[1]-1], [downLetter, coord[1]+1]]
+                       hitsCells.forEach(cell=>{
+                        if(cell[0]!==null && cell[1]>=0 && cell[1]<=9){
+                            if(this.data[cell[0]][cell[1]] === undefined) this.data[cell[0]][cell[1]] = "near"
+                    }})
+                    }
+                })
+            }else{
+                let letterIndexAsNumber = letters.findIndex((element) => element === coord[0])
+                const upLetter = (letterIndexAsNumber-1 >= 0 && letterIndexAsNumber-1 < letters.length) ? letters[letterIndexAsNumber-1] : null
+                const downLetter = (letterIndexAsNumber+1 >= 0 && letterIndexAsNumber+1 < letters.length) ? letters[letterIndexAsNumber+1] : null
+                for(let i=0; i<=9; i++){
+                    const hitsCells = [[upLetter, i], [upLetter, i-1], [upLetter, i+1], [coord[0], i-1], [coord[0], i+1], [downLetter, i], [downLetter, i-1], [downLetter, i+1]]
+                    hitsCells.forEach(cell=>{
+                        if(cell[0]!==null && cell[1]>=0 && cell[1]<=9){
+                            if(this.data[cell[0]][cell[1]] === undefined) this.data[cell[0]][cell[1]] = "near"
+                    }})
+                }
+            }
+        } else {
+        let letterIndexAsNumber = letters.findIndex((element) => element === coord[0])
+        let y = (coord[1])
+        const upperLetter = (letterIndexAsNumber-1 >= 0 && letterIndexAsNumber-1 < letters.length) ? letters[letterIndexAsNumber-1] : null
+        let downLetter = (letterIndexAsNumber+1 >= 0 && letterIndexAsNumber+1 < letters.length) ? letters[letterIndexAsNumber+1] : null
+        let hitsCells = [[upperLetter, y-1], [upperLetter, y+1], [downLetter, y-1], [downLetter, y+1]]
+        hitsCells.forEach(cell=>{
+            if(cell[0]!==null && y>=0 && y<=10){
+                if(this.data[cell[0]][cell[1]] === undefined) this.data[cell[0]][cell[1]] = "near"
+        }})
+    }
     }
     receiveAttack(coord){
-        // place signs around ship
-        if(this.data[coord[0]][coord[1]] !== undefined && this.data[coord[0]][coord[1]] !== "missed" && this.data[coord[0]][coord[1]] !== "nearShip"){
+        if(this.data[coord[0]][coord[1]] !== undefined && this.data[coord[0]][coord[1]] !== "missed" && this.data[coord[0]][coord[1]] !== "near"){
             this.data[coord[0]][coord[1]].hit();
-            // color up to 4 squares around or whole around ship
-            this.#trackHitsAroundShip(coord, this.data[coord[0]][coord[1]].sunk)
-            
+            // color up to 4 squares around or whole space around ship
+            this.#trackHitsAroundShip(coord, this.data[coord[0]][coord[1]])
         } else this.data[coord[0]][coord[1]] = "missed"
     }
 }
