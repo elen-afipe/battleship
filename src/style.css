@@ -61,33 +61,58 @@ img.svg {
   user-select: none;
 }
 :root {
-  --system-ui:
-    Arial; 
-    /* system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, */
-    /* "Segoe UI Symbol"; */
+  --system-ui: Arial;
+  /* system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, */
+  /* "Segoe UI Symbol"; */
   font-size: 14px;
   --primary: rgb(209, 223, 246);
   --white: white;
   --black: black;
-  --blue: rgba(0, 26, 255, 0.765);
+  --blue: rgba(0, 17, 255, 0.662);
+  --grey: rgba(165, 165, 165, 0.509);
+  --red: rgba(255, 69, 69, 0.539);
+  --red-text: rgb(255, 69, 69);
+}
+
+.game-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.game-state {
+  display: flex;
+  align-items: center;
+  padding: 8px;
+  text-align: left;
+  margin: 25px;
+  min-width: 320px;
+  height: 30px;
+  border: 1px solid black;
+  border-radius: 8px;
+}
+.boards-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 80px;
 }
 
 .board {
   border-collapse: collapse;
+  margin-bottom: 30px;
 }
 
-td.cell {
+.cell {
   border: 1px solid var(--black);
   width: 30px;
   height: 30px;
   text-align: center;
 }
 td.x-label {
-  text-align: right;
-  padding-right: 10px;
+  text-align: center;
 }
 td.y-label {
-  text-align: center;
+  text-align: right;
+  padding-right: 10px;
 }
 .ship {
   border: 1px solid var(--blue);
@@ -95,10 +120,33 @@ td.y-label {
 }
 .missed {
   color: var(--black);
-  background-color: gray;
+  background-color: var(--grey);
 }
 
 .hit {
-  color: var(--black);
-  background-color: red;
+  padding: 0px;
+  font-size: 1.2rem;
+  color: var(--red-text);
+  background-color: var(--red);
+}
+.not-clickable {
+  pointer-events: none;
+}
+.shadow {
+  opacity: 0.5;
+}
+
+.btns-container {
+  display: flex;
+  gap: 15px;
+}
+.btn {
+  cursor: pointer;
+  border-radius: 8px;
+  border: 1px solid black;
+  padding: 3px 7px;
+}
+.hidden {
+  opacity: 0;
+  pointer-events: none;
 }

@@ -1,3 +1,4 @@
+import { Ship } from "./ship.js";
 export class Gameboard {
   constructor() {
     this.data = this.#createEmptyBoard();
@@ -34,36 +35,36 @@ export class Gameboard {
     } else return true;
   }
 
-  #addShipToBoard(x, y, ship){
-    if(ship.isVertical){
+  #addShipToBoard(x, y, ship) {
+    if (ship.isVertical) {
       for (let dy = 0; dy < ship.length; dy++) {
-           this.data[x][y+dy] = ship;    
+        this.data[x][y + dy] = ship;
       }
-      } else{
+    } else {
       for (let dx = 0; dx < ship.length; dx++) {
-        this.data[x+dx][y] = ship
-      }
+        this.data[x + dx][y] = ship;
       }
     }
+  }
 
-  #findFirstCell(x, y, ship) {
-    if (ship.isVertical ) {
-      while (y>= 0 && this.data[y]  && this.data[x][y] === ship) {
+  findFirstCell(x, y, ship) {
+    if (ship.isVertical) {
+      while (y >= 0 && this.data[y] && this.data[x][y] === ship) {
         --y;
       }
-      ++y
+      ++y;
       return [x, y];
     } else {
-      while (x>= 0 && this.data[x] && this.data[x][y] === ship) {
+      while (x >= 0 && this.data[x] && this.data[x][y] === ship) {
         --x;
       }
-      ++x
+      ++x;
       return [x, y];
     }
   }
 
   #trackSunkShipHits(x, y, ship) {
-    const firstCell = this.#findFirstCell(x, y, ship);
+    const firstCell = this.findFirstCell(x, y, ship);
     for (let i = 0; i < ship.length; i++) {
       const x = ship.isVertical ? firstCell[0] : firstCell[0] + i;
       const y = ship.isVertical ? firstCell[1] + i : firstCell[1];
@@ -101,7 +102,7 @@ export class Gameboard {
     }
   }
 
-  #allShipsSunk() {
+  allShipsSunk() {
     const allShipsLength = 20;
     let currentSunkLength = 0;
     for (let x = 0; x < 10; x++) {
@@ -121,28 +122,45 @@ export class Gameboard {
     if (coordsSuit) {
       let placeSuits = this.#placeSuits(x, y, ship);
       if (placeSuits) {
-        this.#addShipToBoard(x, y, ship)
+        this.#addShipToBoard(x, y, ship);
         return true;
       }
-    } else return false
+    } else return false;
+  }
+
+  clear() {
+    this.data = this.#createEmptyBoard();
+  }
+
+  placeShipsRandomly() {
+    this.clear();
+    const lengths = [4, 3, 3, 2, 2, 2, 1, 1, 1, 1];
+    lengths.forEach((length) => {
+      let placed = false;
+      while (!placed) {
+        const x = Math.floor(Math.random() * 10);
+        const y = Math.floor(Math.random() * 10);
+        const isVertical = Math.round(Math.random());
+        if (length === 1) placed = this.placeShip([x, y], new Ship(length));
+        else {
+          placed = this.placeShip(
+            [x, y],
+            new Ship(length, Boolean(isVertical)),
+          );
+        }
+      }
+    });
   }
 
   receiveAttack(coord) {
-    let [x, y] = coord
-    x = Number(x)
-    y = Number(y)
-    if (this.#allShipsSunk()) return false;
+    let [x, y] = coord;
+    x = Number(x);
+    y = Number(y);
+    if (this.allShipsSunk()) return false;
     // ship attacked
-    if (
-      this.data[x][y] !== null &&
-      this.data[x][y] !== "missed"
-    ) {
+    if (this.data[x][y] !== null && this.data[x][y] !== "missed") {
       this.data[x][y].hit();
-      this.#trackHitsAroundShip(
-        x,
-        y,
-        this.data[x][y],
-      );
+      this.#trackHitsAroundShip(x, y, this.data[x][y]);
       return true;
       // missed
     } else {
