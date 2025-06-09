@@ -64,7 +64,7 @@ function computerMove(player1, player2) {
   let x;
   let y;
   while (!moveChosen) {
-    [x, y] = player2.makeMove();
+    [x, y] = player2.chooseMove();
     moveChosen = cellIsClickable(x, y);
   }
 
@@ -72,6 +72,7 @@ function computerMove(player1, player2) {
   if (shipHit) {
     markHitCells(x, y, "first");
     markMissedCells(player1.gameboard.data, "first");
+    player2.addHitMoves(x, y);
     setTimeout(() => {
       computerMove(player1, player2);
     }, 1000);
@@ -101,15 +102,16 @@ function endGame(message) {
   p1Board.classList.add("shadow", "not-clickable");
   const p2Board = document.querySelector(".board.second");
   p2Board.classList.add("shadow", "not-clickable");
-  setTimeout(() => {
-    placeAllShips(player1, player2);
-    enableButtons();
-  }, 2000);
+
+  const gameBtn = document.querySelector(".game-control");
+  gameBtn.textContent = "New Round";
+  gameBtn.classList.remove("hidden");
 }
 
 export function placeAllShips(player1, player2) {
   clearBoard("first");
   clearBoard("second");
+  player2.hitMoves = [];
   shadowTheBoard("second");
   changeGameStateMsg("Place your ships");
   player1.gameboard.placeShipsRandomly();
@@ -122,6 +124,11 @@ export function startGame(player1, player2) {
   if (player1.turn) {
     changeGameStateMsg("Your turn");
     unshadowTheBoard("second");
-  } else changeGameStateMsg("Computer's turn");
+  } else {
+    changeGameStateMsg("Computer's turn");
+    setTimeout(() => {
+      computerMove(player1, player2);
+    }, 1000);
+  }
   disableButtons();
 }

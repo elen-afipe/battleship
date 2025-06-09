@@ -98,9 +98,11 @@ img.svg {
 
 .board {
   border-collapse: collapse;
-  margin-bottom: 30px;
 }
-
+.board-label {
+  text-align: center;
+  margin: 15px 25px;
+}
 .cell {
   border: 1px solid var(--black);
   width: 30px;
@@ -138,6 +140,7 @@ td.y-label {
 
 .btns-container {
   display: flex;
+  justify-content: center;
   gap: 15px;
 }
 .btn {
@@ -149,4 +152,11 @@ td.y-label {
 .hidden {
   opacity: 0;
   pointer-events: none;
+}
+
+@media (max-width: 900px) {
+  .boards-container {
+    flex-direction: column;
+    gap: 30px;
+  }
 }

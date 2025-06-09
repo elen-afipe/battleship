@@ -4,6 +4,7 @@ import {
   changeGameStateMsg,
   clearBoard,
   placeShips,
+  enableButtons,
 } from "./ui-board.js";
 import { player1, player2 } from "../game-modules/data-creation.js";
 import {
@@ -44,9 +45,24 @@ btnsContainer.append(randomizeBtn, manualBtn);
 const gameBtn = document.createElement("button");
 gameBtn.classList.add("btn", "game-control");
 gameBtn.textContent = "Play";
-gameBtn.addEventListener("click", () => startGame(player1, player2));
+gameBtn.addEventListener("click", () => {
+  if (gameBtn.textContent === "Play") startGame(player1, player2);
+  else {
+    gameBtn.textContent = "Play";
+    placeAllShips(player1, player2);
+    enableButtons();
+  }
+});
+const board1Label = document.createElement("p");
+board1Label.classList.add("board-label");
+board1Label.textContent = "Your fleet";
+const board2Label = document.createElement("p");
+board2Label.classList.add("board-label");
+board2Label.textContent = "Opponent's fleet";
 createBoard(player1BoardContainer, true);
 createBoard(player2BoardContainer, false);
+player1BoardContainer.appendChild(board1Label);
+player2BoardContainer.appendChild(board2Label);
 player1BoardContainer.appendChild(btnsContainer);
 boardsContainer.append(player1BoardContainer, player2BoardContainer);
 gameContainer.append(gameState, boardsContainer, gameBtn);
