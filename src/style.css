@@ -57,10 +57,9 @@ a {
   text-decoration: none;
   color: inherit;
 }
-img.svg {
-  user-select: none;
-}
+
 :root {
+  user-select: none;
   --system-ui: Arial;
   /* system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, */
   /* "Segoe UI Symbol"; */
@@ -153,6 +152,15 @@ td.y-label {
   opacity: 0;
   pointer-events: none;
 }
+/* .drag-over.ok {
+  background-color: green;
+}
+.drag-over.notok {
+  background-color: red;
+} */
+/* .dragging {
+  opacity: 0;
+} */
 
 @media (max-width: 900px) {
   .boards-container {

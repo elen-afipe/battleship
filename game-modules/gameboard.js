@@ -47,6 +47,18 @@ export class Gameboard {
     }
   }
 
+  removeShipFromBoard(x, y, ship) {
+    if (ship.isVertical) {
+      for (let dy = 0; dy < ship.length; dy++) {
+        this.data[x][y + dy] = null;
+      }
+    } else {
+      for (let dx = 0; dx < ship.length; dx++) {
+        this.data[x + dx][y] = null;
+      }
+    }
+  }
+
   findFirstCell(x, y, ship) {
     if (ship.isVertical) {
       while (y >= 0 && this.data[y] && this.data[x][y] === ship) {
@@ -124,7 +136,7 @@ export class Gameboard {
       if (placeSuits) {
         this.#addShipToBoard(x, y, ship);
         return true;
-      }
+      } else return false;
     } else return false;
   }
 

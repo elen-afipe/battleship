@@ -10,6 +10,8 @@ import {
   placeShips,
   disableButtons,
   enableButtons,
+  disableBoard,
+  enableBoard,
 } from "./ui-board.js";
 
 let shipsPlaced = false;
@@ -20,6 +22,7 @@ function changeTurns(player1, player2) {
     player2.turn = true;
     changeGameStateMsg("Computers' turn");
     shadowTheBoard("second");
+    disableBoard("second");
     setTimeout(() => {
       computerMove(player1, player2);
     }, 1000);
@@ -80,28 +83,16 @@ function computerMove(player1, player2) {
     markMissedCells(player1.gameboard.data, "first");
     changeTurns(player1, player2);
     unshadowTheBoard("second");
+    enableBoard("second");
   }
-}
-
-export function playRound(player1, player2) {
-  //   let p1Sunk = player1.gameboard.allShipsSunk();
-  //   let p2Sunk = player2.gameboard.allShipsSunk();
-  //   // while (!p1Sunk && !p2Sunk) {
-  //   if (player1.turn) {
-  //     p2Sunk = player2.gameboard.allShipsSunk();
-  //   } else {
-  //     // make move
-  //     p1Sunk = player1.gameboard.allShipsSunk();
-  //     // }
-  //   }
 }
 
 function endGame(message) {
   changeGameStateMsg(message);
-  const p1Board = document.querySelector(".board.first");
-  p1Board.classList.add("shadow", "not-clickable");
-  const p2Board = document.querySelector(".board.second");
-  p2Board.classList.add("shadow", "not-clickable");
+  shadowTheBoard("first");
+  disableBoard("first");
+  shadowTheBoard("second");
+  disableBoard("second");
 
   const gameBtn = document.querySelector(".game-control");
   gameBtn.textContent = "New Round";
@@ -113,6 +104,7 @@ export function placeAllShips(player1, player2) {
   clearBoard("second");
   player2.hitMoves = [];
   shadowTheBoard("second");
+  disableBoard("second");
   changeGameStateMsg("Place your ships");
   player1.gameboard.placeShipsRandomly();
   player2.gameboard.placeShipsRandomly();
@@ -121,14 +113,16 @@ export function placeAllShips(player1, player2) {
 }
 
 export function startGame(player1, player2) {
+  disableButtons();
+  disableBoard();
   if (player1.turn) {
     changeGameStateMsg("Your turn");
     unshadowTheBoard("second");
+    enableBoard("second");
   } else {
     changeGameStateMsg("Computer's turn");
     setTimeout(() => {
       computerMove(player1, player2);
     }, 1000);
   }
-  disableButtons();
 }

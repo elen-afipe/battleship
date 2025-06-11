@@ -5,14 +5,12 @@ import {
   clearBoard,
   placeShips,
   enableButtons,
+  enableBoard,
+  disableBoard,
 } from "./ui-board.js";
 import { player1, player2 } from "../game-modules/data-creation.js";
-import {
-  playRound,
-  firstPlayerMove,
-  startGame,
-  placeAllShips,
-} from "./game-functions.js";
+import { firstPlayerMove, startGame, placeAllShips } from "./game-functions.js";
+import { setupDragAndDrop } from "./dnd.js";
 
 const body = document.querySelector("body");
 const gameContainer = document.createElement("div");
@@ -36,6 +34,7 @@ randomizeBtn.addEventListener("click", () => {
   clearBoard("first");
   player1.gameboard.placeShipsRandomly();
   placeShips(player1.gameboard.data, "first");
+  setupDragAndDrop(player1);
 });
 randomizeBtn.classList.add("btn", "random");
 const manualBtn = document.createElement("button");
@@ -51,6 +50,8 @@ gameBtn.addEventListener("click", () => {
     gameBtn.textContent = "Play";
     placeAllShips(player1, player2);
     enableButtons();
+    enableBoard();
+    setupDragAndDrop(player1);
   }
 });
 const board1Label = document.createElement("p");
@@ -73,8 +74,12 @@ document.querySelectorAll(".board.second .cell").forEach((cell) => {
   cell.addEventListener("click", (event) => {
     changeGameStateMsg("Your turn");
     shadowTheBoard("first");
+    disableBoard("first");
     firstPlayerMove(player1, player2, event);
   });
 });
 
 // playRound(player1, player2);
+document.addEventListener("DOMContentLoaded", () => {
+  setupDragAndDrop(player1);
+});

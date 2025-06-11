@@ -57,6 +57,22 @@ export function placeShips(gameboardData, boardSelector) {
   }
 }
 
+export function removeShip(x, y, ship, boardSelector = "first") {
+  if (ship.isVertical) {
+    for (let dy = 0; dy < ship.length; dy++) {
+      const cell = findCell(x, y + dy, boardSelector);
+      cell.classList.remove("ship");
+      cell.removeAttribute("draggable", "true");
+    }
+  } else {
+    for (let dx = 0; dx < ship.length; dx++) {
+      const cell = findCell(x + dx, y, boardSelector);
+      cell.classList.remove("ship");
+      cell.removeAttribute("draggable", "true");
+    }
+  }
+}
+
 export function markMissedCells(gameboardData, boardSelector) {
   for (let x = 0; x < 10; x++) {
     for (let y = 0; y < 10; y++) {
@@ -81,12 +97,22 @@ export function markHitCells(x, y, boardSelector) {
 
 export function shadowTheBoard(boardSelector) {
   const board = document.querySelector(`.board.${boardSelector}`);
-  board.classList.add("shadow", "not-clickable");
+  board.classList.add("shadow");
+}
+
+export function disableBoard(boardSelector = "first") {
+  const board = document.querySelector(`.board.${boardSelector}`);
+  board.classList.add("not-clickable");
+}
+
+export function enableBoard(boardSelector = "first") {
+  const board = document.querySelector(`.board.${boardSelector}`);
+  board.classList.remove("not-clickable");
 }
 
 export function unshadowTheBoard(boardSelector) {
   const board = document.querySelector(`.board.${boardSelector}`);
-  board.classList.remove("shadow", "not-clickable");
+  board.classList.remove("shadow");
 }
 
 export function changeGameStateMsg(message) {

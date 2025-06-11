@@ -22,9 +22,9 @@ export class Player {
       this.addHitMoves = (x, y) => {
         const moves = [
           [x, y - 1],
-          [x + 1, y],
           [x, y + 1],
           [x - 1, y],
+          [x + 1, y],
         ];
         moves.forEach((move) => {
           if (move[0] >= 0 && move[0] <= 9 && move[1] >= 0 && move[1] <= 9) {
