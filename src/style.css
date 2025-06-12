@@ -60,47 +60,72 @@ a {
 
 :root {
   user-select: none;
-  --system-ui: Arial;
-  /* system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, */
-  /* "Segoe UI Symbol"; */
+  --system-ui:
+    Arial, system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   font-size: 14px;
   --primary: rgb(209, 223, 246);
   --white: white;
   --black: black;
-  --blue: rgba(0, 17, 255, 0.662);
-  --grey: rgba(165, 165, 165, 0.509);
-  --red: rgba(255, 69, 69, 0.539);
-  --red-text: rgb(255, 69, 69);
+  --blue: #0000c5bc;
+  --blued: #0000c5;
+  --cloud: #ebeef0;
+  --cloudd: #d4dadf;
+  --play: gradient();
+  --grey: #f0f0f0;
+  --red: #f02828c3;
+  --red-text: #ae0505;
 }
-
+body {
+  font-family: "Pangolin";
+  background-color: #e5e5f7;
+  background-image:
+    linear-gradient(#444df75c 0.5px, transparent 0.5px),
+    linear-gradient(to right, #444df75c 0.5px, #e5e5f7 0.5px);
+  background-size: 30px 30px;
+}
 .game-container {
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin: 30px;
+  background-color: rgba(255, 255, 255, 0.84);
+  border-radius: 20px;
+  padding-bottom: 25px;
 }
 .game-state {
+  padding: 3px 10px;
+  font-size: 1.1rem;
   display: flex;
   align-items: center;
-  padding: 8px;
   text-align: left;
-  margin: 25px;
-  min-width: 320px;
+  margin: 30px;
+  margin-bottom: 40px;
+  min-width: 300px;
   height: 30px;
-  border: 1px solid black;
+  border: 1px solid var(--black);
   border-radius: 8px;
 }
 .boards-container {
   display: flex;
   flex-wrap: wrap;
-  gap: 80px;
+  gap: 135px;
 }
 
 .board {
   border-collapse: collapse;
 }
+.board.first {
+  cursor: move;
+}
 .board-label {
   text-align: center;
   margin: 15px 25px;
+}
+.manual {
+  color: rgb(96, 96, 96);
+  text-align: center;
+  margin: 15px;
+  margin-top: -10px;
 }
 .cell {
   border: 1px solid var(--black);
@@ -108,15 +133,15 @@ a {
   height: 30px;
   text-align: center;
 }
+
 td.x-label {
   text-align: center;
 }
 td.y-label {
   text-align: right;
-  padding-right: 10px;
+  padding-right: 15px;
 }
 .ship {
-  border: 1px solid var(--blue);
   background-color: var(--blue);
 }
 .missed {
@@ -126,10 +151,15 @@ td.y-label {
 
 .hit {
   padding: 0px;
-  font-size: 1.2rem;
   color: var(--red-text);
   background-color: var(--red);
 }
+
+.hit::after {
+  font-size: 1.4rem;
+  content: "╳ ";
+}
+
 .not-clickable {
   pointer-events: none;
 }
@@ -140,31 +170,60 @@ td.y-label {
 .btns-container {
   display: flex;
   justify-content: center;
-  gap: 15px;
 }
 .btn {
   cursor: pointer;
   border-radius: 8px;
-  border: 1px solid black;
-  padding: 3px 7px;
+  border: 1px solid transparent;
+  background-color: var(--cloud);
+  padding: 7px 14px;
+  font-size: 1.1rem;
+}
+.btn:hover {
+  transition: background-color 200ms ease-out;
+}
+.btn:active {
+  opacity: 0.5;
+  transition: opacity 200ms ease-out;
+}
+.game-control {
+  padding: 20px;
+  font-size: 1.3rem;
+  background-color: var(--blue);
+  color: var(--white);
+  border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+}
+.game-control:hover {
+  background-color: var(--blued);
+}
+.random:hover {
+  background-color: var(--cloudd);
 }
 .hidden {
   opacity: 0;
   pointer-events: none;
 }
-/* .drag-over.ok {
-  background-color: green;
-}
-.drag-over.notok {
-  background-color: red;
-} */
-/* .dragging {
-  opacity: 0;
-} */
 
 @media (max-width: 900px) {
+  .game-state {
+    min-width: 250px;
+  }
+  .game-container {
+    margin: 40px 100px;
+  }
   .boards-container {
     flex-direction: column;
     gap: 30px;
+  }
+}
+@media (max-width: 600px) {
+  .game-container {
+    margin: 40px;
+  }
+}
+@media (max-width: 450px) {
+  .game-container {
+    margin: 0px;
+    padding: 20px;
   }
 }
