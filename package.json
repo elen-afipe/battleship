@@ -25,5 +25,8 @@
     "deploy": "git subtree push --prefix dist origin gh-pages",
     "lint": "eslint",
     "test": "jest"
+  },
+  "dependencies": {
+    "@fontsource/pangolin": "^5.2.6"
   }
 }

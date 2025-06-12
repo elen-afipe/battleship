@@ -37,10 +37,10 @@ randomizeBtn.addEventListener("click", () => {
   setupDragAndDrop(player1);
 });
 randomizeBtn.classList.add("btn", "random");
-const manualBtn = document.createElement("button");
-manualBtn.classList.add("btn", "manual");
-manualBtn.textContent = "Place manually";
-btnsContainer.append(randomizeBtn, manualBtn);
+const manualText = document.createElement("p");
+manualText.classList.add("manual");
+manualText.textContent = "Click to rotate, drag to place ship";
+btnsContainer.append(randomizeBtn);
 const gameBtn = document.createElement("button");
 gameBtn.classList.add("btn", "game-control");
 gameBtn.textContent = "Play";
@@ -64,7 +64,7 @@ createBoard(player1BoardContainer, true);
 createBoard(player2BoardContainer, false);
 player1BoardContainer.appendChild(board1Label);
 player2BoardContainer.appendChild(board2Label);
-player1BoardContainer.appendChild(btnsContainer);
+player1BoardContainer.append(manualText, btnsContainer);
 boardsContainer.append(player1BoardContainer, player2BoardContainer);
 gameContainer.append(gameState, boardsContainer, gameBtn);
 
@@ -72,14 +72,13 @@ placeAllShips(player1, player2);
 
 document.querySelectorAll(".board.second .cell").forEach((cell) => {
   cell.addEventListener("click", (event) => {
-    changeGameStateMsg("Your turn");
+    changeGameStateMsg("Your turn...");
     shadowTheBoard("first");
     disableBoard("first");
     firstPlayerMove(player1, player2, event);
   });
 });
 
-// playRound(player1, player2);
 document.addEventListener("DOMContentLoaded", () => {
   setupDragAndDrop(player1);
 });

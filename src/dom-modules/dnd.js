@@ -1,6 +1,5 @@
-import { findCell, removeShip, placeShips } from "./ui-board.js";
+import { removeShip, placeShips } from "./ui-board.js";
 import { Ship } from "../game-modules/ship.js";
-import { player1 } from "../game-modules/data-creation.js";
 
 let dragState = null;
 export function setupDragAndDrop(player1) {
@@ -26,7 +25,7 @@ export function setupDragAndDrop(player1) {
   document.querySelectorAll(".board.first .cell").forEach((cell) => {
     cell.addEventListener("dragover", (e) => {
       e.stopPropagation();
-      dragoverHandler(e, player1.gameboard);
+      dragoverHandler(e);
     });
 
     cell.addEventListener("drop", (e) => {
@@ -56,8 +55,6 @@ function placeShipVertically(e, gameboard, player1) {
   const [targetX, targetY] = firstCell;
   gameboard.removeShipFromBoard(targetX, targetY, oldShip);
   removeShip(targetX, targetY, oldShip);
-  console.log("placing");
-  console.log(targetX, targetY);
   const newShip = new Ship(oldShip.length, !oldShip.isVertical);
   const shipPlaced = gameboard.placeShip([targetX, targetY], newShip);
   if (!shipPlaced) {
@@ -81,7 +78,7 @@ function drawShipForDrag(shipData) {
     dragImage.style.width = `${width}px`;
     dragImage.style.height = `${height}px`;
   }
-  dragImage.style.backgroundColor = "navy";
+  dragImage.style.backgroundColor = "#0000c5";
   dragImage.style.position = "absolute";
   dragImage.style.top = "-10000px";
   document.body.appendChild(dragImage);
@@ -89,8 +86,6 @@ function drawShipForDrag(shipData) {
 }
 
 function dragstartHandler(e, gameboard) {
-  console.log("Drag started", e.target);
-
   if (!e.target.classList.contains("ship")) {
     e.preventDefault();
     return;
@@ -104,9 +99,6 @@ function dragstartHandler(e, gameboard) {
     e.preventDefault();
     return;
   }
-
-  console.log(x, y);
-  console.log(shipData);
 
   const firstCell = gameboard.findFirstCell(x, y, shipData);
   dragState = {
@@ -132,31 +124,14 @@ function dragstartHandler(e, gameboard) {
   const dragImage = drawShipForDrag(shipData);
   e.dataTransfer.setDragImage(dragImage, 15, 15);
 }
-// function colorDragImg(e, gameboard) {
-//   const data = JSON.parse(e.dataTransfer.getData("application/json"));
-//   const ship = new Ship(data.ship.length, data.ship.isVertical);
-//   const dragImage = document.body.querySelector(".drag-ghost");
-//   const targetX = parseInt(e.target.dataset.x);
-//   const targetY = parseInt(e.target.dataset.y);
-//   const shipPlaced = gameboard.placeShip([targetX, targetY], ship);
-//   dragImage.classList.add("drag-over");
-//   if (shipPlaced) {
-//     dragImage.style.backgroundColor = "green";
-//     gameboard.removeShipFromBoard(targetX, targetY, ship);
-//   } else {
-//     dragImage.style.backgroundColor = "red";
-//   }
-// }
-function dragoverHandler(e, gameboard) {
+
+function dragoverHandler(e) {
   e.preventDefault();
-  // colorDragImg(e, gameboard);
 }
 
 function dropHandler(e, player1) {
   const gameboard = player1.gameboard;
   e.preventDefault();
-
-  console.log("Drop event", e.target);
 
   document.querySelectorAll(".drag-over").forEach((el) => {
     el.classList.remove("drag-over");
@@ -171,13 +146,7 @@ function dropHandler(e, player1) {
     const targetX = parseInt(e.target.dataset.x);
     const targetY = parseInt(e.target.dataset.y);
 
-    console.log(
-      `Moving ship from (${sourceX},${sourceY}) to (${targetX},${targetY})`,
-    );
-
     const shipPlaced = gameboard.placeShip([targetX, targetY], ship);
-    console.log(ship);
-    console.log(shipPlaced);
 
     if (!shipPlaced) {
       gameboard.placeShip([sourceX, sourceY], ship);
@@ -208,8 +177,6 @@ function handleDragEnd(player1) {
     el.remove();
   });
   if (dragState && !dragState.dropped) {
-    console.log("Drop failed, restoring ship to original position");
-    console.log(dragState);
     const sourceX = dragState.sourceX;
     const sourceY = dragState.sourceY;
     const ship = new Ship(dragState.ship.length, dragState.ship.isVertical);
@@ -219,13 +186,3 @@ function handleDragEnd(player1) {
   }
   dragState = null;
 }
-
-// Add CSS to your stylesheet:
-/*
-  .dragging {
-    opacity: 0.4;
-  }
-  .drag-over {
-    background-color: rgba(0, 255, 0, 0.2);
-  }
-  */

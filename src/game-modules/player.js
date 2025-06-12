@@ -5,7 +5,6 @@ export class Player {
     this.gameboard = new Gameboard();
     this.turn = this.type === "computer" ? false : true;
     if (this.type === "computer") {
-      // this.hitsMap = Array.from({ length: 10 }, () => new Array(10).fill(0.5));
       this.chooseMove = () => {
         if (this.hitMoves.length > 0) {
           const x = this.hitMoves[0][0];

@@ -91,7 +91,6 @@ export function markMissedCells(gameboardData, boardSelector) {
 export function markHitCells(x, y, boardSelector) {
   const attackedCell = findCell(x, y, boardSelector);
   attackedCell.classList.add("hit");
-  attackedCell.textContent = "✖";
   attackedCell.classList.add("not-clickable");
 }
 
@@ -133,13 +132,17 @@ export function clearBoard(boardSelector) {
 export function disableButtons() {
   const gameBtn = document.querySelector(".game-control");
   const placeBtns = document.querySelector(".btns-container");
+  const manual = document.querySelector(".manual");
   gameBtn.classList.add("hidden");
   placeBtns.classList.add("hidden");
+  manual.classList.add("hidden");
 }
 
 export function enableButtons() {
   const gameBtn = document.querySelector(".game-control");
   const placeBtns = document.querySelector(".btns-container");
+  const manual = document.querySelector(".manual");
   gameBtn.classList.remove("hidden");
   placeBtns.classList.remove("hidden");
+  manual.classList.remove("hidden");
 }

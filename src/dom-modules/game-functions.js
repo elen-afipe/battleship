@@ -1,4 +1,3 @@
-import { player1, player2 } from "../game-modules/data-creation.js";
 import {
   markMissedCells,
   markHitCells,
@@ -9,25 +8,22 @@ import {
   clearBoard,
   placeShips,
   disableButtons,
-  enableButtons,
   disableBoard,
   enableBoard,
 } from "./ui-board.js";
-
-let shipsPlaced = false;
 
 function changeTurns(player1, player2) {
   if (player1.turn) {
     player1.turn = false;
     player2.turn = true;
-    changeGameStateMsg("Computers' turn");
+    changeGameStateMsg("Computers' turn...");
     shadowTheBoard("second");
     disableBoard("second");
     setTimeout(() => {
       computerMove(player1, player2);
-    }, 1000);
+    }, 600);
   } else {
-    changeGameStateMsg("Your turn");
+    changeGameStateMsg("Your turn...");
     player1.turn = true;
     player2.turn = false;
   }
@@ -37,10 +33,10 @@ function allShipsSunk(player1, player2) {
   let p1Sunk = player1.gameboard.allShipsSunk();
   let p2Sunk = player2.gameboard.allShipsSunk();
   if (p1Sunk) {
-    endGame("Computer won");
+    endGame("Sink me! You sank!");
     return true;
   } else if (p2Sunk) {
-    endGame("You won");
+    endGame("Ahoy! You won!");
   } else return false;
 }
 
@@ -78,10 +74,11 @@ function computerMove(player1, player2) {
     player2.addHitMoves(x, y);
     setTimeout(() => {
       computerMove(player1, player2);
-    }, 1000);
+    }, 800);
   } else {
     markMissedCells(player1.gameboard.data, "first");
     changeTurns(player1, player2);
+    shadowTheBoard("first");
     unshadowTheBoard("second");
     enableBoard("second");
   }
@@ -109,20 +106,20 @@ export function placeAllShips(player1, player2) {
   player1.gameboard.placeShipsRandomly();
   player2.gameboard.placeShipsRandomly();
   placeShips(player1.gameboard.data, "first");
-  shipsPlaced = true;
 }
 
 export function startGame(player1, player2) {
   disableButtons();
   disableBoard();
   if (player1.turn) {
-    changeGameStateMsg("Your turn");
+    changeGameStateMsg("Your turn...");
+    shadowTheBoard("first");
     unshadowTheBoard("second");
     enableBoard("second");
   } else {
-    changeGameStateMsg("Computer's turn");
+    changeGameStateMsg("Computer's turn...");
     setTimeout(() => {
       computerMove(player1, player2);
-    }, 1000);
+    }, 600);
   }
 }
